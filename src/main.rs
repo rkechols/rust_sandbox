@@ -1,37 +1,41 @@
-use std::cmp::Ordering;
 use std::io;
 
-use rand::Rng;
-
 fn main() {
-    println!("-----GUESSING GAME-----");
-    println!("I have chosen a secret number from 1 to 100");
-
-    let secret_number = rand::thread_rng().gen_range(1..101);
-    // println!("The secret number is {}", secret_number);  // debugging
-
-    loop {
-        println!("Enter your guess now:");
-        let mut guess = String::new();
+    let n = loop {
+        println!("Enter a positive integer:");
+        let mut input = String::new();
         io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
-        let guess: u32 = match guess.trim().parse() {
+            .read_line(&mut input)
+            .expect("Could not read from stdin!");
+        let input: u8 = match input.trim().parse() {
             Ok(num) => num,
             Err(_) => {
-                println!("That is not a valid number");
+                println!("Invalid input; try again.");
                 continue;
             }
         };
-        println!("You guessed: {}", guess);
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You got it!");
-                break;
-            }
+        if input <= 0 {
+            println!("Number must be positive; try again.");
+            continue;
         }
+        break input;
+    };
+
+    println!("Calculating the n-th Fibonacci number, n = {}", n);
+    let result = nth_fib(n);
+    println!("Your Fibonacci number is {}", result)
+}
+
+fn nth_fib(n: u8) -> u128 {
+    if n < 3 {
+        return 1;
     }
+    let mut num_old: u128 = 1;
+    let mut num_new: u128 = 1;
+    for _ in 3..=n {
+        let num_next = num_old.checked_add(num_new).expect("Integer overflow! Number is too big.");
+        num_old = num_new;
+        num_new = num_next;
+    }
+    num_new
 }
