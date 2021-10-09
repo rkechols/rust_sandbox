@@ -1,8 +1,8 @@
 // use std::io;
 
 struct Rectangle {
-    width: i32,
-    height: i32
+    width: u32,
+    height: u32
 }
 
 fn main() {
@@ -14,6 +14,6 @@ fn main() {
     println!("The area of a {} x {} rectangle is {}", rect.width, rect.height, area)
 }
 
-fn calc_area(rectangle: &Rectangle) -> i32 {
+fn calc_area(rectangle: &Rectangle) -> u32 {
     rectangle.width * rectangle.height
 }
